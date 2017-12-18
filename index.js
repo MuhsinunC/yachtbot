@@ -1,3 +1,7 @@
+/**
+ * Entry point.
+ */
+
 const https = require('https');
 const cc = require('cryptocompare');
 global.fetch = require('node-fetch');
@@ -6,22 +10,25 @@ const config = require('./config');
 
 const options = {
   hostname: 'discordapp.com',
-  path: config.webhooks.cryptopricing,
+  path: config.webhooks.cryptopricing.dev,
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
 };
 
+/**
+ * The in-progress request ready to be executed.
+ * @type {http.ClientRequest}
+ */
 const req = https.request(options, res => {
-  console.log(`STATUS: ${res.statusCode}`);
+  if (res.statusCode === 200 || res.statusCode === 204) {
+    console.log(`Status: ${res.statusCode}`, 'Post successful!');
+  }
+
   res.on('data', chunk => {
     console.log(`BODY: ${chunk}`);
   });
-});
-
-req.on('error', error => {
-  console.log(error);
 });
 
 /**
@@ -31,15 +38,18 @@ req.on('error', error => {
  */
 async function getETHMarketValue() {
   try {
+    // fetch crypto pricings
     const ETH_VAL = await cc.price('ETH', ['USD']);
-    console.log(ETH_VAL['USD']);
+    // prepare data
     const requestData = {
-      content: 'Bitcoin: $707.57',
+      content: `$ETC: ${ETH_VAL['USD']}`,
     };
+
+    // send POST to Discord
     req.write(JSON.stringify(requestData));
     req.end();
   } catch (error) {
-    throw new Error(error);
+    throw new Error('error during POST', error);
   }
 }
 
