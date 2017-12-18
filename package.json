@@ -1,12 +1,20 @@
 {
-  "name": "crypto-discord-bot",
-  "version": "0.1.0",
-  "description": "Discord bot for cryptocurrency prices",
-  "main": "index.js",
-  "repository": "https://github.com/YACHTPARTY/crypto-discord-bot.git",
-  "authors": [
-    "Syed Nashik Aman <syednashikaman@gmail.com> (https://github.com/SyedAman)",
-    "Numaer Zaker <email> (https://github.com/numaer)"
+    "name": "crypto-discord-bot",
+    "version": "0.1.0",
+    "description": "Discord bot for cryptocurrency prices",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/YACHTPARTY/crypto-discord-bot.git"
+    },
+    "keywords": [
+        "node",
+        "discord",
+        "cryptocurrency"
+    ],
+    "authors": [
+        "Syed Nashik Aman <syednashikaman@gmail.com> (https://github.com/SyedAman)",
+        "Numaer Zaker <email> (https://github.com/numaer)"
   ],
   "license": "MIT",
   "dependencies": {
