@@ -29,6 +29,8 @@ client.on('message', message => {
     response.then(result => {
       const reply = `${content}: ${result}`;
       message.reply(reply);
+    }).catch((error) =>{
+      // Leave this blank as the error is pointless.
     });
   }
 });
