@@ -8,39 +8,36 @@ const https = require('https');
 const cc = require('cryptocompare');
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const config = require('./config');
 global.fetch = require('node-fetch');
 
-/*
- * Runs when bot is connected. 
- *
- */
+const config = require('./config');
+
+// indicate bot is connected
 client.on('ready', () => {
   console.log('Bot is ready!');
 });
 
-/*
- * Parses a user message and responds to it accordingly.
- */
+// parse user messages and respond accordingly
 client.on('message', message => {
-  //console.log(message.content);
-  m = message.content;
-  if (m === 'fuck') {
+  const content = message.content;
+
+  if (content === 'fuck') {
     message.reply('fuck me daddy');
-  }
-  else if (m.includes("$")){
-    var response = getMarketValue(m.replace("$",""));
-    response.then(function(result){
-      var msg = m + ": " + result
-      message.reply(msg);
+  } else if (content.includes('$')) {
+    const response = getMarketValue(content.replace('$', ''));
+
+    response.then(result => {
+      const reply = `${content}: ${result}`;
+      message.reply(reply);
     });
   }
 });
 
 /**
- * Gets the current market value for any currency..
+ * Gets the current market value for any currency.
  * @method getMarketValue
- * @return {Promise}
+ * @param  {String} ticker - The cryptocurrency symbol i.e $ETH.
+ * @return {Number} - The price of the ticker in USD.
  */
 async function getMarketValue(ticker) {
   try {
@@ -48,9 +45,9 @@ async function getMarketValue(ticker) {
     const VAL = await cc.price(ticker, ['USD']);
     return VAL.USD;
   } catch (error) {
-    throw new Error('error during POST', error);
+    throw new Error(error);
   }
 }
 
-// Make the bot login to the server
+// make the bot login to the server
 client.login(config.secret);
