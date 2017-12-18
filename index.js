@@ -52,6 +52,7 @@ async function getMarketValue(ticker) {
 // make the bot login to the server
 try {
   client.login(config.secret);
+  console.log('bot has successfully logged in');
 } catch (error) {
   throw new Error('bot failed to login', error);
 }
