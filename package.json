@@ -5,5 +5,9 @@
   "main": "index.js",
   "repository": "https://github.com/SyedAman/discord-crypto-webhook.git",
   "author": "Syed Nashik Aman",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cryptocompare": "^0.3.0",
+    "node-fetch": "^1.7.3"
+  }
 }
