@@ -16,25 +16,25 @@ global.fetch = require('node-fetch');
  *
  */
 client.on('ready', () => {
-    console.log('Bot is ready!');
+  console.log('Bot is ready!');
 });
 
 /*
  * Parses a user message and responds to it accordingly.
  */
 client.on('message', message => {
-    //console.log(message.content);
-    m = message.content;
-    if (m === 'fuck') {
-        message.reply('fuck me daddy');
-    }
-    else if (m.includes("$")){
-        var response = getMarketValue(m.replace("$",""));
-        response.then(function(result){
-            var msg = m + ": " + result
-            message.reply(msg);
-        });
-    }
+  //console.log(message.content);
+  m = message.content;
+  if (m === 'fuck') {
+    message.reply('fuck me daddy');
+  }
+  else if (m.includes("$")){
+    var response = getMarketValue(m.replace("$",""));
+    response.then(function(result){
+      var msg = m + ": " + result
+      message.reply(msg);
+    });
+  }
 });
 
 /**
@@ -43,13 +43,13 @@ client.on('message', message => {
  * @return {Promise}
  */
 async function getMarketValue(ticker) {
-    try {
-        // fetch crypto pricings
-        const VAL = await cc.price(ticker, ['USD']);
-        return VAL.USD;
-    } catch (error) {
-        throw new Error('error during POST', error);
-    }
+  try {
+    // fetch crypto pricings
+    const VAL = await cc.price(ticker, ['USD']);
+    return VAL.USD;
+  } catch (error) {
+    throw new Error('error during POST', error);
+  }
 }
 
 // Make the bot login to the server
