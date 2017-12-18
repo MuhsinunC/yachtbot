@@ -1,7 +1,7 @@
 {
   "name": "crypto-discord-bot",
   "version": "0.1.0",
-  "description": "Webhook for cryptocurrency prices",
+  "description": "Discord bot for cryptocurrency prices",
   "main": "index.js",
   "repository": "https://github.com/YACHTPARTY/crypto-discord-bot.git",
   "authors": [
