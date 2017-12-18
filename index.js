@@ -21,7 +21,7 @@ client.on('ready', () => {
  * Gets the current market value for any currency.
  * @method getMarketValue
  * @param  {String} ticker - The cryptocurrency symbol i.e $ETH.
- * @return {Number} - The price of the ticker in USD.
+ * @return {Promise} - The price of the ticker in USD.
  */
 async function getMarketValue(ticker) {
   try {
