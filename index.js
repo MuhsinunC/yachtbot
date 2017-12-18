@@ -43,10 +43,8 @@ client.on('message', async message => {
     } else if (content.includes('$')) {
       const response = await getMarketValue(content.replace('$', ''));
 
-      response.then(result => {
-        const reply = `${content}: ${result}`;
-        message.reply(reply);
-      });
+      const reply = `${content}: ${response}`;
+      message.reply(reply);
     }
   } catch (error) {
     throw new Error(error);
