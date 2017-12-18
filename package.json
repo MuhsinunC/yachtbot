@@ -1,13 +1,14 @@
 {
   "name": "discord-crypto-webhook",
   "version": "1.0.0",
-  "description": "webhood for cryptocurrency prices",
+  "description": "Webhook for cryptocurrency prices",
   "main": "index.js",
   "repository": "https://github.com/SyedAman/discord-crypto-webhook.git",
   "author": "Syed Nashik Aman",
   "license": "MIT",
   "dependencies": {
     "cryptocompare": "^0.3.0",
+    "discord.js": "^11.2.1",
     "node-fetch": "^1.7.3"
   },
   "scripts": {

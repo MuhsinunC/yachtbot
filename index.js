@@ -1,56 +1,56 @@
 /**
- * Entry point.
+ * index.js
+ *
+ * Application entry point.
  */
 
 const https = require('https');
 const cc = require('cryptocompare');
+const Discord = require('discord.js');
+const client = new Discord.Client();
+const config = require('./config');
 global.fetch = require('node-fetch');
 
-const config = require('./config');
-
-const options = {
-  hostname: 'discordapp.com',
-  path: config.webhooks.cryptopricing.dev,
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-};
-
-/**
- * The in-progress request ready to be executed.
- * @type {http.ClientRequest}
+/*
+ * Runs when bot is connected. 
+ *
  */
-const req = https.request(options, res => {
-  if (res.statusCode === 200 || res.statusCode === 204) {
-    console.log(`Status: ${res.statusCode}`, 'Post successful!');
-  }
+client.on('ready', () => {
+    console.log('Bot is ready!');
+});
 
-  res.on('data', chunk => {
-    console.log(`BODY: ${chunk}`);
-  });
+/*
+ * Parses a user message and responds to it accordingly.
+ */
+client.on('message', message => {
+    //console.log(message.content);
+    m = message.content;
+    if (m === 'fuck') {
+        message.reply('fuck me daddy');
+    }
+    else if (m.includes("$")){
+        var response = getMarketValue(m.replace("$",""));
+        response.then(function(result){
+            var msg = m + ": " + result
+            message.reply(msg);
+        });
+    }
 });
 
 /**
- * Gets the current market value for Ethereum.
- * @method getETHMarketValue
- * @return {undefined}
+ * Gets the current market value for any currency..
+ * @method getMarketValue
+ * @return {Promise}
  */
-async function getETHMarketValue() {
-  try {
-    // fetch crypto pricings
-    const ETH_VAL = await cc.price('ETH', ['USD']);
-    // prepare data
-    const requestData = {
-      content: `$ETH: ${ETH_VAL['USD']}`,
-    };
-
-    // send POST to Discord
-    req.write(JSON.stringify(requestData));
-    req.end();
-  } catch (error) {
-    throw new Error('error during POST', error);
-  }
+async function getMarketValue(ticker) {
+    try {
+        // fetch crypto pricings
+        const VAL = await cc.price(ticker, ['USD']);
+        return VAL.USD;
+    } catch (error) {
+        throw new Error('error during POST', error);
+    }
 }
 
-getETHMarketValue();
+// Make the bot login to the server
+client.login(config.secret);
