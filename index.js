@@ -42,7 +42,7 @@ async function getETHMarketValue() {
     const ETH_VAL = await cc.price('ETH', ['USD']);
     // prepare data
     const requestData = {
-      content: `$ETC: ${ETH_VAL['USD']}`,
+      content: `$ETH: ${ETH_VAL['USD']}`,
     };
 
     // send POST to Discord
