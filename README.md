@@ -12,7 +12,7 @@
 
 ```sh
 $ git clone https://github.com/SyedAman/discord-crypto-webhook.git
-$ yarn start ## use npm instead
+$ yarn start ## you can use npm instead
 ```
 
 ### Docker
