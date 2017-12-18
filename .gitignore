@@ -62,3 +62,6 @@ typings/
 
 # Misc garb
 package-lock.json
+
+# Ignore the sekrits
+config.js
