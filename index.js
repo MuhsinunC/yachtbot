@@ -39,11 +39,11 @@ client.on('message', message => {
  * Gets the current market value for any currency.
  * @method getMarketValue
  * @param  {String} ticker - The cryptocurrency symbol i.e $ETH.
- * @return {Number} - The price of the ticker in USD.
+ * @return {Promise} - The price of the ticker in USD.
  */
 async function getMarketValue(ticker) {
   try {
-    // fetch crypto pricings
+    // fetch crypto pricings in US dollars
     const VAL = await cc.price(ticker, ['USD']);
     return VAL.USD;
   } catch (error) {
@@ -54,6 +54,7 @@ async function getMarketValue(ticker) {
 // make the bot login to the server
 try {
   client.login(config.secret);
+  console.log('bot has successfully logged in');
 } catch (error) {
   throw new Error('bot failed to login', error);
 }
