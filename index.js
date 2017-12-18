@@ -17,22 +17,6 @@ client.on('ready', () => {
   console.log('Bot is ready!');
 });
 
-// parse user messages and respond accordingly
-client.on('message', message => {
-  const content = message.content;
-
-  if (content === 'fuck') {
-    message.reply('fuck me daddy');
-  } else if (content.includes('$')) {
-    const response = getMarketValue(content.replace('$', ''));
-
-    response.then(result => {
-      const reply = `${content}: ${result}`;
-      message.reply(reply);
-    });
-  }
-});
-
 /**
  * Gets the current market value for any currency.
  * @method getMarketValue
@@ -41,13 +25,33 @@ client.on('message', message => {
  */
 async function getMarketValue(ticker) {
   try {
-    // fetch crypto pricings
+    // fetch crypto pricings in US dollars
     const VAL = await cc.price(ticker, ['USD']);
     return VAL.USD;
   } catch (error) {
     throw new Error(error);
   }
 }
+
+// parse user messages and respond accordingly
+client.on('message', async message => {
+  try {
+    const content = message.content;
+
+    if (content === 'fuck') {
+      message.reply('fuck me daddy');
+    } else if (content.includes('$')) {
+      const response = await getMarketValue(content.replace('$', ''));
+
+      response.then(result => {
+        const reply = `${content}: ${result}`;
+        message.reply(reply);
+      });
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 
 // make the bot login to the server
 try {
