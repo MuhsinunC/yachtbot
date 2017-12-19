@@ -1,10 +1,21 @@
 {
-  "name": "discord-crypto-webhook",
-  "version": "1.0.0",
-  "description": "Webhook for cryptocurrency prices",
-  "main": "index.js",
-  "repository": "https://github.com/SyedAman/discord-crypto-webhook.git",
-  "author": "Syed Nashik Aman",
+    "name": "crypto-discord-bot",
+    "version": "0.1.0",
+    "description": "Discord bot for cryptocurrency prices",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/YACHTPARTY/crypto-discord-bot.git"
+    },
+    "keywords": [
+        "node",
+        "discord",
+        "cryptocurrency"
+    ],
+    "authors": [
+        "Syed Nashik Aman <syednashikaman@gmail.com> (https://github.com/SyedAman)",
+        "Numaer Zaker <email> (https://github.com/numaer)"
+  ],
   "license": "MIT",
   "dependencies": {
     "cryptocompare": "^0.3.0",
