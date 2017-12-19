@@ -42,7 +42,7 @@ client.on('message', message => {
 async function getMarketValue (ticker) {
   try {
     // fetch crypto pricings
-    const VAL = await cc.price(ticker, ['USD'])
+    const VAL = await cc.price(ticker.toUpperCase(), ['USD'])
     return VAL.USD
   } catch (error) {
     throw new Error(error)
