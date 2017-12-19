@@ -20,10 +20,11 @@ client.on('ready', () => {
 // parse user messages and respond accordingly
 client.on('message', message => {
   const content = message.content;
+  const tickerRegex = /^[$A-Z]{4}$/gi;
 
   if (content === 'fuck') {
     message.reply('fuck me daddy');
-  } else if (content.includes('$')) {
+  } else if (content.match(tickerRegex)) {
     const response = getMarketValue(content.replace('$', ''));
 
     response.then(result => {
