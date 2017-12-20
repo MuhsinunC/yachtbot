@@ -88,11 +88,8 @@ client.on('message', async message => {
  */
 async function getMarketValue (ticker) {
   try {
-    // remove the $ from the ticker
-    if (ticker.includes('$')) ticker = ticker.replace('$', '')
-
     // fetch crypto pricings
-    const VAL = await cc.price(ticker.toUpperCase(), ['USD'])
+    const VAL = await cc.price(ticker.replace('$', '').toUpperCase(), ['USD'])
     return VAL.USD
   } catch (error) {
     console.error(error)
