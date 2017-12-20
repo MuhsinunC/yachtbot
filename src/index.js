@@ -20,9 +20,16 @@ client.on('ready', () => {
 client.on('message', async message => {
   try {
     const content = message.content
-    const tickerRegex = /^[$][A-Z]{3,4}$/gi
+    const tickerRegex = /^[$][A-Z]{3,4}$/i
     const fuckRegex = /^f+u+c+k+$/gi
-    const betRegex = /^bet$/gi
+    /**
+     * Regex for determining if user wants to make a bet. Following is valid:
+     * "bet $ETH increases 5% in 2 days"
+     * "BET $btc -7% tomorrow"
+     * "bet $ETH decreases 2% in 5 days"
+     * @type {Regex}
+     */
+    const betRegex = /^bet\s[$][A-Z]{3,4}.+\d%\s(tomorrow|in\s\d\sdays)/i
 
     if (content.match(fuckRegex)) {
       message.reply('fuck me daddy')
@@ -40,12 +47,13 @@ client.on('message', async message => {
       // user can type "bet $ETH decreases 2% tomorrow"
       // user can type "bet $ETH -2% tomorrow"
       // bot broadcasts the bet
+      // allow canceling the bet within 1 minute
       // only accept 24 hours right now (tomorrow)
       // can make max 3 bets at any given time
       // gives or takes away 1 point from users depending on bet results
       // store user's points in a db
-      const ticker = '$BTC'
-      const betPercentChange = -5
+      const ticker = content.match(/[$][A-Z]{3,4}/i)
+      const betPercentChange = content.match(/\d%/)
       const betCloseTimeInMs = 8.64E7
       const originalTickerValueInUSD = await getMarketValue(ticker)
 
