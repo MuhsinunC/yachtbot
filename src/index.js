@@ -22,15 +22,49 @@ client.on('message', async message => {
     const content = message.content
     const tickerRegex = /^[$][A-Z]{3,4}$/gi
     const fuckRegex = /^f+u+c+k+$/gi
+    const betRegex = /^bet$/gi
 
     if (content.match(fuckRegex)) {
       message.reply('fuck me daddy')
     } else if (content.match(tickerRegex)) {
-      const response = await getMarketValue(content)
-      const reply = response
-        ? `**${content.toUpperCase()}**: $${response}`
+      const tickerValueInUSD = await getMarketValue(content)
+      // reply with ticker market value
+      const reply = tickerValueInUSD
+        ? `**${content.toUpperCase()}**: $${tickerValueInUSD}`
         : `**${content.toUpperCase()}** was not found!`
       message.reply(reply)
+    } else if (content.match(betRegex)) {
+      // requirements:
+      // user can type "bet $BTC increases 5% tomorrow"
+      // user can type "bet $BTC +5% tomorrow"
+      // user can type "bet $ETH decreases 2% tomorrow"
+      // user can type "bet $ETH -2% tomorrow"
+      // bot broadcasts the bet
+      // only accept 24 hours right now (tomorrow)
+      // can make max 3 bets at any given time
+      // gives or takes away 1 point from users depending on bet results
+      // store user's points in a db
+      const ticker = '$BTC'
+      const betPercentChange = -5
+      const betCloseTimeInMs = 8.64E7
+      const originalTickerValueInUSD = await getMarketValue(ticker)
+
+      // broadcast
+      message.reply(`${message.author} has bet that ${ticker} will change by ${betPercentChange}% tomorrow!`)
+
+      // evaluate bet after duration expiration
+      client.setTimeout((betPercentChange, originalTickerValueInUSD) => {
+        const currentTickerValueInUSD = await getMarketValue(ticker)
+        const currentPercentChange = (originalTickerValueInUSD - currentTickerValueInUSD) / originalTickerValueInUSD
+
+        // check if ticker value matches bet
+        // provide 2% padding/error-margin
+        if ((Math.abs(betPercentChange - currentPercentChange)) <= 2) {
+          // increment points in db
+        } else {
+          // decrement points in db
+        }
+      }, betCloseTimeInMs)
     }
   } catch (error) {
     console.error(error)
