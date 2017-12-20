@@ -20,7 +20,7 @@ client.on('ready', () => {
 client.on('message', message => {
   const content = message.content
   const tickerRegex = /^[$][A-Z]{3,4}$/gi
-  const fuckRegex = /^fuck$/gi
+  const fuckRegex = /^f+u+c+k+$/gi
 
   if (content.match(fuckRegex)) {
     message.reply('fuck me daddy')
