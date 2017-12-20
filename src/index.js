@@ -9,7 +9,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 global.fetch = require('node-fetch')
 
-const config = require('./config')
+const config = require('../config')
 
 // indicate bot is connected
 client.on('ready', () => {
