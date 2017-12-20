@@ -28,7 +28,7 @@ client.on('message', message => {
     const response = getMarketValue(content.replace('$', ''))
 
     response.then(result => {
-      const reply = `${content}: ${result}`
+      const reply = `${content.toUpperCase()}: ${result}`
       message.reply(reply)
     })
   }
