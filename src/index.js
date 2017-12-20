@@ -28,7 +28,9 @@ client.on('message', async message => {
     } else if (content.match(tickerRegex)) {
       const response = await getMarketValue(content.replace('$', ''))
 
-      const reply = `${content.toUpperCase()}: ${response}`
+      const reply = response
+        ? `**${content.toUpperCase()}**: $${response}`
+        : `**${content.toUpperCase()}** was not found!`
       message.reply(reply)
     }
   } catch (error) {
