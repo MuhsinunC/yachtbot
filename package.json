@@ -9,8 +9,8 @@
   },
   "keywords": ["node", "discord", "cryptocurrency"],
   "authors": [
-    "Syed Nashik Aman <syednashikaman@gmail.com> (https://github.com/SyedAman)",
-    "Numaer Zaker <email> (https://github.com/numaer)"
+    "Syed Nashik Aman (https://github.com/SyedAman)",
+    "Numaer Zaker (https://github.com/numaer)"
   ],
   "license": "MIT",
   "dependencies": {
