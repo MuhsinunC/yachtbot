@@ -96,7 +96,11 @@ async function getMarketValue (ticker) {
   }
 }
 
-// make the bot login to the server
+/**
+ * Logs the bot into the discord channel using an auth token.
+ * @method login
+ * @return {Undefined}
+ */
 const login = async () => {
   try {
     client.login(config.secret)
@@ -106,4 +110,5 @@ const login = async () => {
   }
 }
 
+// make the bot login to the server
 login()
