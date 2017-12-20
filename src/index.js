@@ -29,7 +29,7 @@ client.on('message', async message => {
      * "bet $ETH decreases 2% in 5 days"
      * @type {Regex}
      */
-    const betRegex = /^bet\s[$][A-Z]{3,4}.+\d%\s(tomorrow|in\s\d\sdays)/i
+    const betRegex = /^bet\s[$][A-Z]{3,4}.+\d%\s(tomorrow|in\s\d+\sdays)/i
 
     if (content.match(fuckRegex)) {
       message.reply('fuck me daddy')
