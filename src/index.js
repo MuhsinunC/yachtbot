@@ -52,8 +52,8 @@ client.on('message', async message => {
       // can make max 3 bets at any given time
       // gives or takes away 1 point from users depending on bet results
       // store user's points in a db
-      const ticker = content.match(/[$][A-Z]{3,4}/i)
-      const betPercentChange = content.match(/\d%/)
+      const ticker = content.match(/[$][A-Z]{3,4}/i)[0]
+      const betPercentChange = content.match(/\d%/)[0]
       const betCloseTimeInMs = 8.64E7
       const originalTickerValueInUSD = await getMarketValue(ticker)
 
