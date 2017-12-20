@@ -20,8 +20,9 @@ client.on('ready', () => {
 client.on('message', message => {
   const content = message.content
   const tickerRegex = /^[$A-Z]{4}$/gi
+  const fuckRegex = /^fuck$/gi
 
-  if (content === 'fuck') {
+  if (content.match(fuckRegex)) {
     message.reply('fuck me daddy')
   } else if (content.match(tickerRegex)) {
     const response = getMarketValue(content.replace('$', ''))
