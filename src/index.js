@@ -26,8 +26,7 @@ client.on('message', async message => {
     if (content.match(fuckRegex)) {
       message.reply('fuck me daddy')
     } else if (content.match(tickerRegex)) {
-      const response = await getMarketValue(content.replace('$', ''))
-
+      const response = await getMarketValue(content)
       const reply = response
         ? `**${content.toUpperCase()}**: $${response}`
         : `**${content.toUpperCase()}** was not found!`
@@ -41,11 +40,15 @@ client.on('message', async message => {
 /**
  * Gets the current market value for any currency.
  * @method getMarketValue
- * @param  {String} ticker - The cryptocurrency symbol i.e $ETH.
+ * @param  {String} ticker - The cryptocurrency symbol i.e $ETH or ETH. Case
+ * insensitive.
  * @return {Number} - The price of the ticker in USD.
  */
 async function getMarketValue (ticker) {
   try {
+    // remove the $ from the ticker
+    if (ticker.includes('$')) ticker.replace('$', '')
+
     // fetch crypto pricings
     const VAL = await cc.price(ticker.toUpperCase(), ['USD'])
     return VAL.USD
