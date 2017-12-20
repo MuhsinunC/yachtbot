@@ -54,7 +54,7 @@ client.on('message', async message => {
       // store user's points in a db
       const ticker = content.match(/[$][A-Z]{3,4}/i)[0]
       const betPercentChange = content.match(/\d%/)[0]
-      const betCloseTimeInMs = 8.64E7
+      const betCloseTimeInMs = content.match(/(tomorrow|in\s\d+\sdays)/i) === 'tomorrow' ? 8.64E7 : content.match(/(tomorrow|in\s\d\sdays)/i).match(/\d+/)[0] * 8.64E7
       const originalTickerValueInUSD = await getMarketValue(ticker)
 
       // broadcast
