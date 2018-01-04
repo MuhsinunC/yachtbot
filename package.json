@@ -1,10 +1,17 @@
 {
-  "name": "discord-crypto-webhook",
-  "version": "1.0.0",
-  "description": "Webhook for cryptocurrency prices",
+  "name": "crypto-discord-bot",
+  "version": "0.1.0",
+  "description": "Discord bot for cryptocurrency prices",
   "main": "index.js",
-  "repository": "https://github.com/SyedAman/discord-crypto-webhook.git",
-  "author": "Syed Nashik Aman",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YACHTPARTY/crypto-discord-bot.git"
+  },
+  "keywords": ["node", "discord", "cryptocurrency"],
+  "authors": [
+    "Syed Nashik Aman (https://github.com/SyedAman)",
+    "Numaer Zaker (https://github.com/numaer)"
+  ],
   "license": "MIT",
   "dependencies": {
     "cryptocompare": "^0.3.0",
@@ -12,6 +19,15 @@
     "node-fetch": "^1.7.3"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "npm run lint && node src/index.js",
+    "lint": "eslint src/**/*.js"
+  },
+  "devDependencies": {
+    "eslint": "^4.13.1",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
   }
 }

@@ -1,0 +1,12 @@
+{
+  "extends": "standard",
+  "plugins": [
+    "eslint-plugin-import",
+    "eslint-plugin-node",
+    "eslint-plugin-promise",
+    "eslint-plugin-standard"
+  ],
+  "env": {
+    "node": true
+  }
+}
