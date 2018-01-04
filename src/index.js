@@ -15,24 +15,28 @@ const commands = require('./commands')
 
 // indicate bot is connected
 client.on('ready', () => {
-  console.log('Bot is ready!')
+  console.info('bot is ready!')
 })
 
 // parse user messages and respond accordingly
-client.on('message', message => {
-  const content = message.content
-  const tickerRegex = /^[$A-Z]{4}$/gi
+client.on('message', async message => {
+  try {
+    const content = message.content
+    const tickerRegex = /^[$][A-Z]{3,4}$/gi
+    const fuckRegex = /^f+u+c+k+$/gi
 
-  if (content === 'fuck') {
-    console.log(commands.cmds)
-    message.reply(commands.cmds.fuck())
-  } else if (content.match(tickerRegex)) {
-    const response = getMarketValue(content.replace('$', ''))
+    if (content.match(fuckRegex)) {
+      message.reply('fuck me daddy')
+    } else if (content.match(tickerRegex)) {
+      const response = await getMarketValue(content.replace('$', ''))
 
-    response.then(result => {
-      const reply = `${content}: ${result}`
+      const reply = response
+        ? `**${content.toUpperCase()}**: $${response}`
+        : `**${content.toUpperCase()}** was not found!`
       message.reply(reply)
-    })
+    }
+  } catch (error) {
+    console.error(error)
   }
 })
 
@@ -49,7 +53,7 @@ async function getMarketValue (ticker) {
     const VAL = await cc.price(ticker.toUpperCase(), ['USD'])
     return VAL.USD
   } catch (error) {
-    throw new Error(error)
+    console.error(error)
   }
 }
 
@@ -58,6 +62,7 @@ async function getMarketValue (ticker) {
 // make the bot login to the server
 try {
   client.login(config.secret)
+  console.info('bot has logged in')
 } catch (error) {
-  throw new Error('bot failed to login', error)
+  console.error('bot failed to login', error)
 }
