@@ -10,6 +10,8 @@ const client = new Discord.Client()
 global.fetch = require('node-fetch')
 
 const config = require('./config')
+const commands = require('./commands')
+
 
 // indicate bot is connected
 client.on('ready', () => {
@@ -22,7 +24,8 @@ client.on('message', message => {
   const tickerRegex = /^[$A-Z]{4}$/gi
 
   if (content === 'fuck') {
-    message.reply('fuck me daddy')
+    console.log(commands.cmds)
+    message.reply(commands.cmds.fuck())
   } else if (content.match(tickerRegex)) {
     const response = getMarketValue(content.replace('$', ''))
 
@@ -32,6 +35,7 @@ client.on('message', message => {
     })
   }
 })
+
 
 /**
  * Gets the current market value for any currency.
@@ -48,6 +52,8 @@ async function getMarketValue (ticker) {
     throw new Error(error)
   }
 }
+
+
 
 // make the bot login to the server
 try {
