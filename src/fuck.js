@@ -1,9 +1,13 @@
+/**
+ * fuck.js
+ *
+ * fuck 
+ */
+
 function getFuck(){
   return 'fuck me daddy'
 }
 
-const cmds = {
+module.exports.cmds = {
   fuck: getFuck,
 }
-
-module.exports = cmds;
