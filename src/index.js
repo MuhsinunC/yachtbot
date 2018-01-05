@@ -38,7 +38,7 @@ client.on('message', async message => {
     } else if(content.match(tradeRegex)) {
       const response = await trade.tradeSimulator(content)
     console.log(response)
-			message.reply(response)
+			message.reply(response) 
     }
   } catch (error) {
     console.error(error)
