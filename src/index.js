@@ -24,6 +24,7 @@ client.on('message', async message => {
     const content = message.content
     const tickerRegex = /^[$][A-Z]{3,4}$/gi
     const fuckRegex = /^f+u+c+k+$/gi
+    const shitRegex = /^s+h+i+t+$/gi
     const tradeRegex = /^t+r+a+d+e/gi
     const bitchRegex = /^b+i+t+c+h/gi
 
@@ -41,7 +42,9 @@ client.on('message', async message => {
     console.log(response)
 			message.reply(response)
     } else if(content.match(bitchRegex)){
-      message.reply("tits");
+      message.reply("don't be a bitch.");
+    } else if(content.match(shitRegex)){
+      message.reply("lol u lost money.")
     }
   } catch (error) {
     console.error(error)
