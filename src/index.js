@@ -42,9 +42,9 @@ client.on('message', async message => {
     console.log(response)
 			message.reply(response)
     } else if(content.match(bitchRegex)){
-      message.reply("don't be a bitch.");
+      message.reply(fuck.cmds.bitch());
     } else if(content.match(shitRegex)){
-      message.reply("lol u lost money.")
+      message.reply(fuck.cmds.shit())
     }
   } catch (error) {
     console.error(error)
