@@ -41,7 +41,7 @@ client.on('message', async message => {
     console.log(response)
 			message.reply(response)
     } else if(content.match(bitchRegex)){
-      message.reply("🍆");
+      message.reply("tits");
     }
   } catch (error) {
     console.error(error)
