@@ -4,10 +4,10 @@
  * fuck
  */
 
-function getFuck(){
+function getFuck () {
   return 'fuck me daddy'
 }
-function getShit(){
+function getShit () {
   return 'lol u lost money'
 }
 
