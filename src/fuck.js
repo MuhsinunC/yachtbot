@@ -4,16 +4,16 @@
  * fuck
  */
 
-function getFuck(){
+function getFuck () {
   return 'fuck me daddy'
 }
 
-function getBitch(){
+function getBitch () {
   return "don't be a bitch.'"
 }
 
-function getShit(){
-  return "lol u lost money."
+function getShit () {
+  return 'lol u lost money.'
 }
 
 module.exports.cmds = {
