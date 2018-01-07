@@ -24,6 +24,7 @@ client.on('message', async message => {
     const content = message.content
     const tickerRegex = /^[$][A-Z]{3,4}$/gi
     const fuckRegex = /^f+u+c+k+$/gi
+    const shitRegex = /^s+h+i+t+$/gi
     const tradeRegex = /^t+r+a+d+e/gi
 
     if (content.match(fuckRegex)) {
@@ -38,7 +39,9 @@ client.on('message', async message => {
     } else if(content.match(tradeRegex)) {
       const response = await trade.tradeSimulator(content)
     console.log(response)
-			message.reply(response) 
+			message.reply(response)
+    }else if(content.match(shitRegex)) {
+      message.reply(fuck.cmds.shit())
     }
   } catch (error) {
     console.error(error)
