@@ -11,7 +11,7 @@ global.fetch = require('node-fetch')
 const config = require('./config')
 const fuck = require('./fuck')
 const market = require('./market')
-const trade = require ('./trade')
+const trade = require('./trade')
 
 // indicate bot is connected
 client.on('ready', () => {
@@ -29,7 +29,7 @@ client.on('message', async message => {
     const bitchRegex = /^b+i+t+c+h/gi
 
     if (content.match(fuckRegex)) {
-      console.log(fuck.cmds);
+      console.log(fuck.cmds)
       message.reply(fuck.cmds.fuck())
     } else if (content.match(tickerRegex)) {
       const response = await market.getMarketValue(content.replace('$', ''))
@@ -37,13 +37,13 @@ client.on('message', async message => {
         ? `**${content.toUpperCase()}**: $${response}`
         : `**${content.toUpperCase()}** was not found!`
       message.reply(reply)
-    } else if(content.match(tradeRegex)) {
+    } else if (content.match(tradeRegex)) {
       const response = await trade.tradeSimulator(content)
-    console.log(response)
-			message.reply(response)
-    } else if(content.match(bitchRegex)){
-      message.reply(fuck.cmds.bitch());
-    } else if(content.match(shitRegex)){
+      console.log(response)
+      message.reply(response)
+    } else if (content.match(bitchRegex)) {
+      message.reply(fuck.cmds.bitch())
+    } else if (content.match(shitRegex)) {
       message.reply(fuck.cmds.shit())
     }
   } catch (error) {

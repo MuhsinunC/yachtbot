@@ -18,4 +18,4 @@ async function getMarketValue (ticker) {
   }
 }
 
-module.exports.getMarketValue = getMarketValue;
+module.exports.getMarketValue = getMarketValue
