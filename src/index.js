@@ -22,7 +22,7 @@ client.on('ready', () => {
 client.on('message', async message => {
   try {
     const content = message.content
-    const tickerRegex = /^[$][A-Z]{3,4}$/gi
+    const tickerRegex = /^[$][A-Z]{3,7}$/gi
     const fuckRegex = /^f+u+c+k+$/gi
     const shitRegex = /^s+h+i+t+$/gi
     const tradeRegex = /^t+r+a+d+e/gi
@@ -32,11 +32,26 @@ client.on('message', async message => {
       console.log(fuck.cmds)
       message.reply(fuck.cmds.fuck())
     } else if (content.match(tickerRegex)) {
-      const response = await market.getMarketValue(content.replace('$', ''))
-      const reply = response
-        ? `**${content.toUpperCase()}**: $${response}`
-        : `**${content.toUpperCase()}** was not found!`
-      message.reply(reply)
+      const symbolAndTradePair = content.replace('$', '').toUpperCase()
+      // first send CMC since it's pretty instant
+      const coinmarketcapPrice = await market.getPriceFromCoinMarketCap(
+        symbolAndTradePair
+      )
+      if (coinmarketcapPrice) {
+        message.reply({ embed: coinmarketcapPrice })
+      } else {
+        message.reply(
+          `**${symbolAndTradePair.toUpperCase()}** was not found on CoinMarketCap!`
+        )
+      }
+      const binancePrice = await market.getPriceFromBinance(symbolAndTradePair)
+      if (binancePrice) {
+        message.reply({ embed: binancePrice })
+      } else {
+        message.reply(
+          `**${symbolAndTradePair.toUpperCase()}** was not found on Binance!`
+        )
+      }
     } else if (content.match(tradeRegex)) {
       const response = await trade.tradeSimulator(content)
       console.log(response)
