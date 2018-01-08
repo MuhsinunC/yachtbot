@@ -3,7 +3,7 @@
  * Gets cypto prices from exchanges and returns result as Object
  * for Discord Rich Embedded Message
  */
-const exchanges = require("./exchanges");
+const exchanges = require('./exchanges')
 
 /**
  * extracks trading pair and symbol i.e
@@ -11,31 +11,31 @@ const exchanges = require("./exchanges");
  * $ETHUSD - ETH USD
  */
 const extractTradePairAndSymbol = symbol => {
-  let tradePair = symbol.substr(-3);
-  let tradeSymbol = "";
+  let tradePair = symbol.substr(-3)
+  let tradeSymbol = ''
   if (tradePair === symbol) {
-    tradeSymbol = symbol;
+    tradeSymbol = symbol
   } else {
-    tradeSymbol = symbol.substr(0, symbol.length - tradePair.length);
+    tradeSymbol = symbol.substr(0, symbol.length - tradePair.length)
   }
   // ETHETH or BTCBTC is an invalid trade pair
   if (tradePair !== tradeSymbol) {
-    if (tradePair === "BTC") tradePair = "BTC";
-    else if (tradePair === "ETH") {
-      tradePair = "ETH";
-    } else if (tradePair === "BNB") {
-      tradePair = "BNB";
-    } else if (tradePair === "USD") {
+    if (tradePair === 'BTC') tradePair = 'BTC'
+    else if (tradePair === 'ETH') {
+      tradePair = 'ETH'
+    } else if (tradePair === 'BNB') {
+      tradePair = 'BNB'
+    } else if (tradePair === 'USD') {
       // we use BTC if explicitly someone wants i.e VENUSD
-      tradePair = "BTC";
+      tradePair = 'BTC'
     }
     return {
       tradeSymbol,
       tradePair
-    };
+    }
   }
-  return { tradeSymbol, tradePair: "BTC" };
-};
+  return { tradeSymbol, tradePair: 'BTC' }
+}
 
 /**
  * We need to get the global average as well as current price from Binance
@@ -45,63 +45,59 @@ const extractTradePairAndSymbol = symbol => {
  */
 const getPriceFromBinance = async symbol => {
   try {
-    let binancePrice = {};
-    symbol = symbol.toUpperCase();
+    let binancePrice = {}
     // Binance requires a trading pair to pull in price i.e VENETH
-    let { tradeSymbol, tradePair } = extractTradePairAndSymbol(symbol);
-    if (tradeSymbol === "BTC") {
+    let { tradeSymbol, tradePair } = extractTradePairAndSymbol(symbol)
+    if (tradeSymbol === 'BTC') {
       // we need to make only one call if it's BTC
-      binancePrice = await exchanges.binance.getCoinStats(tradeSymbol + "USDT");
-      binancePrice["tradePair"] = "USDT";
+      binancePrice = await exchanges.binance.getCoinStats(tradeSymbol + 'USDT')
+      binancePrice['tradePair'] = 'USDT'
     } else {
       // 1 call to get symbol price in provided pair
       let bnbSymbolPrice = await exchanges.binance.getCoinStats(
         tradeSymbol + tradePair
-      );
+      )
       // if and only if the coin exist on binance
       if (bnbSymbolPrice) {
         // 1 call to get current tradePair price to get accurate USD value
         let bnbTradePair = await exchanges.binance.getCoinStats(
-          tradePair + "USDT"
-        );
+          tradePair + 'USDT'
+        )
 
         // insert tradePairPrice (USD)
-        bnbSymbolPrice["tradePairPrice"] = bnbTradePair["lastPrice"];
-        bnbSymbolPrice["tradePair"] = tradePair;
-        binancePrice = bnbSymbolPrice;
+        bnbSymbolPrice['tradePairPrice'] = bnbTradePair['lastPrice']
+        bnbSymbolPrice['tradePair'] = tradePair
+        binancePrice = bnbSymbolPrice
       } else {
         // sometimes a coin/pair might not exist on binance in that case don't continue;
-        return null;
+        return null
       }
     }
     // insert symbols and pairs for URL since binance doesn't provide this
-    binancePrice["symbol"] = tradeSymbol;
+    binancePrice['symbol'] = tradeSymbol
     // get beautified objects for discord and return
-    return getBinanceEmbeddedContent(binancePrice);
+    return getBinanceEmbeddedContent(binancePrice)
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-};
+}
 
 /**
  * Gets price from Coin Market Cap
  */
 const getPriceFromCoinMarketCap = async symbol => {
   // get price from coin market cap and return as object
-  symbol = symbol.toUpperCase();
-  let { tradeSymbol, tradePair } = extractTradePairAndSymbol(symbol);
-  console.log(tradeSymbol);
-  console.log(tradePair);
+  let { tradeSymbol } = extractTradePairAndSymbol(symbol)
   try {
     return getCoinmarketcapEmbeddedContent(
       await exchanges.coinmarketcap.getCoinStats(tradeSymbol)
-    );
+    )
   } catch (error) {
-    console.error(error);
-    return null;
+    console.error(error)
+    return null
   }
-};
-const priceInUSD = (pairPrice, ownPrice) => (pairPrice * ownPrice).toFixed(4);
+}
+const priceInUSD = (pairPrice, ownPrice) => (pairPrice * ownPrice).toFixed(4)
 /**
  *
  * Generates embeded object from CMC data for Discord
@@ -116,37 +112,37 @@ const getCoinmarketcapEmbeddedContent = cmc => {
     color: parseFloat(cmc.percent_change_24h) < 0 ? 10958133 : 5943124,
     fields: [
       {
-        name: "Price Change",
+        name: 'Price Change',
         value: `**${cmc.percent_change_1h}**% 1h | **${
           cmc.percent_change_24h
         }**% 24h`,
         inline: true
       },
       {
-        name: "Market Cap",
+        name: 'Market Cap',
         value: `$${parseFloat(cmc.market_cap_usd).toFixed(2)}`,
         inline: true
       },
       {
-        name: "Volume (24h)",
-        value: `$${parseFloat(cmc["24h_volume_usd"]).toFixed(2)}`,
+        name: 'Volume (24h)',
+        value: `$${parseFloat(cmc['24h_volume_usd']).toFixed(2)}`,
         inline: true
       }
     ]
-  };
-  return result;
-};
+  }
+  return result
+}
 /**
  *
  * Generates embeded object from Binance data for Discord
  */
 const getBinanceEmbeddedContent = binance => {
   // Sometimes there's no binance result so we won't create that field
-  let binanceField = {};
-  let description = "";
-  let priceChange = "";
-  let movement = "";
-  let volume = "";
+  let binanceField = {}
+  let description = ''
+  let priceChange = ''
+  let movement = ''
+  let volume = ''
   if (binance) {
     if (binance.tradePairPrice) {
       description = `**$${priceInUSD(
@@ -154,13 +150,13 @@ const getBinanceEmbeddedContent = binance => {
         binance.lastPrice
       )}** USD | **${parseFloat(binance.lastPrice).toFixed(6)}** ${
         binance.tradePair
-      }`;
+      }`
       priceChange = `**$${priceInUSD(
         binance.tradePairPrice,
         binance.priceChange
       )}** USD | **${parseFloat(binance.priceChange).toFixed(6)}** ${
         binance.tradePair
-      } | **${binance.priceChangePercent}**%`;
+      } | **${binance.priceChangePercent}**%`
 
       movement = `**High**: $${priceInUSD(
         binance.tradePairPrice,
@@ -170,18 +166,18 @@ const getBinanceEmbeddedContent = binance => {
       } | **Low**: $${priceInUSD(
         binance.tradePairPrice,
         binance.lowPrice
-      )} USD / ${parseFloat(binance.lowPrice).toFixed(6)} ${binance.tradePair}`;
+      )} USD / ${parseFloat(binance.lowPrice).toFixed(6)} ${binance.tradePair}`
 
-      volume = `${binance.quoteVolume} ${binance.tradePair}`;
+      volume = `${binance.quoteVolume} ${binance.tradePair}`
     } else {
-      description = `**$${parseFloat(binance.lastPrice).toFixed(4)}** USD`;
+      description = `**$${parseFloat(binance.lastPrice).toFixed(4)}** USD`
       priceChange = `$**${parseFloat(binance.priceChange).toFixed(
         4
-      )}** USD | **${binance.priceChangePercent}**%`;
+      )}** USD | **${binance.priceChangePercent}**%`
       movement = `**High**: $${parseFloat(binance.highPrice).toFixed(
         4
-      )} USD | **Low**: $${parseFloat(binance.lowPrice).toFixed(4)} USD`;
-      volume = `$${binance.quoteVolume} USD`;
+      )} USD | **Low**: $${parseFloat(binance.lowPrice).toFixed(4)} USD`
+      volume = `$${binance.quoteVolume} USD`
     }
     binanceField = {
       title: `__**${binance.symbol} on Binance**__`,
@@ -192,23 +188,23 @@ const getBinanceEmbeddedContent = binance => {
       color: parseFloat(binance.priceChangePercent) < 0 ? 10958133 : 5943124,
       fields: [
         {
-          name: "Price Change (24h)",
+          name: 'Price Change (24h)',
           value: priceChange
         },
         {
-          name: "Movement (24h)",
+          name: 'Movement (24h)',
           value: movement
         },
         {
-          name: "Volume (24h)",
+          name: 'Volume (24h)',
           value: volume
         }
       ]
-    };
-    return binanceField;
+    }
+    return binanceField
   }
-};
+}
 module.exports = {
   getPriceFromCoinMarketCap,
   getPriceFromBinance
-};
+}
