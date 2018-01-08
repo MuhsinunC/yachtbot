@@ -66,5 +66,5 @@ package-lock.json
 # Ignore the sekrits
 config.js
 
-#Ignpre .DS_Store
-.DS_Store
+#Ignore .DS_Store
+ **/.DS_Store
