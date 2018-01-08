@@ -20,6 +20,8 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "cryptocompare": "^0.3.0",
+    "node-coinmarketcap-api": "^1.0.4",
+    "binance-api-node": "^0.4.3",
     "discord.js": "^11.2.1",
     "node-fetch": "^1.7.3"
   },
