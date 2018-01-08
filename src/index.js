@@ -22,7 +22,7 @@ client.on('ready', () => {
 client.on('message', async message => {
   try {
     const content = message.content
-    const tickerRegex = /^[$][A-Z]{3,7}$/gi
+    const tickerRegex = /^[$][A-Za-z ]{3,}$/i
     const fuckRegex = /^f+u+c+k+$/gi
     const shitRegex = /^s+h+i+t+$/gi
     const tradeRegex = /^t+r+a+d+e/gi
@@ -32,25 +32,33 @@ client.on('message', async message => {
       console.log(fuck.cmds)
       message.reply(fuck.cmds.fuck())
     } else if (content.match(tickerRegex)) {
-      const symbolAndTradePair = content.replace('$', '').toUpperCase()
+      const symbolAndTradePairMarket = content.replace('$', '').split(' ')
+      const symbolAndTradePair = symbolAndTradePairMarket[0].toUpperCase()
+      const marketName = symbolAndTradePairMarket[1]
+
       // first send CMC since it's pretty instant
-      const coinmarketcapPrice = await market.getPriceFromCoinMarketCap(
-        symbolAndTradePair
-      )
-      if (coinmarketcapPrice) {
-        message.reply({ embed: coinmarketcapPrice })
-      } else {
-        message.reply(
-          `**${symbolAndTradePair.toUpperCase()}** was not found on CoinMarketCap!`
+      if (!marketName || marketName.toUpperCase() === 'CMC') {
+        const coinmarketcapPrice = await market.getPriceFromCoinMarketCap(
+          symbolAndTradePair
         )
-      }
-      const binancePrice = await market.getPriceFromBinance(symbolAndTradePair)
-      if (binancePrice) {
-        message.reply({ embed: binancePrice })
-      } else {
-        message.reply(
-          `**${symbolAndTradePair.toUpperCase()}** was not found on Binance!`
+        if (coinmarketcapPrice) {
+          message.reply({ embed: coinmarketcapPrice })
+        } else {
+          message.reply(
+            `**${symbolAndTradePair.toUpperCase()}** was not found on CoinMarketCap!`
+          )
+        }
+      } else if (marketName && marketName.toUpperCase() === 'BINANCE') {
+        const binancePrice = await market.getPriceFromBinance(
+          symbolAndTradePair
         )
+        if (binancePrice) {
+          message.reply({ embed: binancePrice })
+        } else {
+          message.reply(
+            `**${symbolAndTradePair.toUpperCase()}** was not found on Binance!`
+          )
+        }
       }
     } else if (content.match(tradeRegex)) {
       const response = await trade.tradeSimulator(content)
