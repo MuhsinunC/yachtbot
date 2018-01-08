@@ -9,14 +9,20 @@ const exchanges = require('./exchanges')
  * extracts trading pair and symbol i.e
  * $ETHBTC - ETH BTC
  * $ETHUSD - ETH USD
+ * $LINK
  */
 const extractTradePairAndSymbol = symbol => {
   let tradePair = symbol.substr(-3)
   let tradeSymbol = ''
-  if (tradePair === symbol) {
+  if (symbol.length === 3 || symbol.length === 4) {
+    tradePair = 'BTC'
     tradeSymbol = symbol
   } else {
-    tradeSymbol = symbol.substr(0, symbol.length - tradePair.length)
+    if (tradePair === symbol) {
+      tradeSymbol = symbol
+    } else {
+      tradeSymbol = symbol.substr(0, symbol.length - tradePair.length)
+    }
   }
   // ETHETH or BTCBTC is an invalid trade pair
   if (tradePair !== tradeSymbol) {
@@ -105,7 +111,10 @@ const priceInUSD = (pairPrice, ownPrice) => (pairPrice * ownPrice).toFixed(4)
 const getCoinmarketcapEmbeddedContent = cmc => {
   const result = {
     title: `__${cmc.name} (**${cmc.symbol}**)__  (${cmc.rank} Rank)`,
-    url: `https://coinmarketcap.com/currencies/${cmc.name}/`,
+    url: `https://coinmarketcap.com/currencies/${cmc.name.replace(
+      /\s+/g,
+      '-'
+    )}/`,
     description: `Global Average Price: **$${cmc.price_usd}** USD | **${
       cmc.price_btc
     }** BTC`,
