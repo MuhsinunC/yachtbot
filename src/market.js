@@ -1,12 +1,12 @@
 /**
  * market.js
- * Gets cypto prices from exchanges and returns result as Object
+ * Gets crypto prices from exchanges and returns result as Object
  * for Discord Rich Embedded Message
  */
 const exchanges = require('./exchanges')
 
 /**
- * extracks trading pair and symbol i.e
+ * extracts trading pair and symbol i.e
  * $ETHBTC - ETH BTC
  * $ETHUSD - ETH USD
  */
@@ -100,7 +100,7 @@ const getPriceFromCoinMarketCap = async symbol => {
 const priceInUSD = (pairPrice, ownPrice) => (pairPrice * ownPrice).toFixed(4)
 /**
  *
- * Generates embeded object from CMC data for Discord
+ * Generates embedded object from CMC data for Discord
  */
 const getCoinmarketcapEmbeddedContent = cmc => {
   const result = {
@@ -134,7 +134,7 @@ const getCoinmarketcapEmbeddedContent = cmc => {
 }
 /**
  *
- * Generates embeded object from Binance data for Discord
+ * Generates embedded object from Binance data for Discord
  */
 const getBinanceEmbeddedContent = binance => {
   // Sometimes there's no binance result so we won't create that field
@@ -151,7 +151,7 @@ const getBinanceEmbeddedContent = binance => {
       )}** USD | **${parseFloat(binance.lastPrice).toFixed(6)}** ${
         binance.tradePair
       }`
-      priceChange = `**$${priceInUSD(
+      priceChange = `**$ ${priceInUSD(
         binance.tradePairPrice,
         binance.priceChange
       )}** USD | **${parseFloat(binance.priceChange).toFixed(6)}** ${
@@ -171,7 +171,7 @@ const getBinanceEmbeddedContent = binance => {
       volume = `${binance.quoteVolume} ${binance.tradePair}`
     } else {
       description = `**$${parseFloat(binance.lastPrice).toFixed(4)}** USD`
-      priceChange = `$**${parseFloat(binance.priceChange).toFixed(
+      priceChange = `**$ ${parseFloat(binance.priceChange).toFixed(
         4
       )}** USD | **${binance.priceChangePercent}**%`
       movement = `**High**: $${parseFloat(binance.highPrice).toFixed(
