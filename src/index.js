@@ -8,7 +8,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 global.fetch = require('node-fetch')
 
-const config = require('./config')
+const config = require('../config')
 const fuck = require('./fuck')
 const market = require('./market')
 const trade = require('./trade')
