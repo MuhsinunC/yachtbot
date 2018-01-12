@@ -12,6 +12,7 @@ const config = require('./config')
 const fuck = require('./fuck')
 const market = require('./market')
 const trade = require ('./trade')
+const predict = require('./predict')
 
 // indicate bot is connected
 client.on('ready', () => {
@@ -26,6 +27,7 @@ client.on('message', async message => {
     const fuckRegex = /^f+u+c+k+$/gi
     const shitRegex = /^s+h+i+t+$/gi
     const tradeRegex = /^t+r+a+d+e/gi
+    const predictRegex = /^p+r+e+d+i+c+t\s[$][A-Z]{3,4}$/gi
 
     if (content.match(fuckRegex)) {
       console.log(fuck.cmds);
@@ -35,6 +37,7 @@ client.on('message', async message => {
       const reply = response
         ? `**${content.toUpperCase()}**: $${response}`
         : `**${content.toUpperCase()}** was not found!`
+      console.log(response);
       message.reply(reply)
     } else if(content.match(tradeRegex)) {
       const response = await trade.tradeSimulator(content)
@@ -42,6 +45,10 @@ client.on('message', async message => {
 			message.reply(response)
     }else if(content.match(shitRegex)) {
       message.reply(fuck.cmds.shit())
+    }else if(content.match(predictRegex)){
+      const response = await market.getMarketValue(content.replace('predict $', ''));
+      console.log(response);
+      message.reply(predict.predict.predict(response));
     }
   } catch (error) {
     console.error(error)
