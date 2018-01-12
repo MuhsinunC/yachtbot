@@ -6,7 +6,8 @@
 
 function getPredict(price){
   price = parseFloat(price);
-  var priceVariance = price / 9;
+  let divisionInt = getRandomInt(5,9);
+  var priceVariance = price / divisionInt; //range 9 to 5 to 9
   return roundToXDigits(price +  Math.floor(Math.random() * priceVariance) - (priceVariance / 2));
 }
 
@@ -18,6 +19,10 @@ function roundToXDigits(value, digits) {
     value = Math.round(value);
     value = value / Math.pow(10, digits);
     return value;
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 module.exports.predict = {

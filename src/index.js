@@ -46,9 +46,11 @@ client.on('message', async message => {
     }else if(content.match(shitRegex)) {
       message.reply(fuck.cmds.shit())
     }else if(content.match(predictRegex)){
+      const ticker = content.replace('predict ', '');
       const response = await market.getMarketValue(content.replace('predict $', ''));
       console.log(response);
-      message.reply(predict.predict.predict(response));
+      message.reply(ticker + " prediction: " + predict.predict.predict(response) +
+      "   current: " + response);
     }
   } catch (error) {
     console.error(error)
