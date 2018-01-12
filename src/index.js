@@ -48,7 +48,6 @@ client.on('message', async message => {
     }else if(content.match(predictRegex)){
       const ticker = content.replace('predict ', '');
       const response = await market.getMarketValue(content.replace('predict $', ''));
-      console.log(response);
       message.reply(ticker + " prediction: " + predict.predict.predict(response) +
       "   current: " + response);
     }

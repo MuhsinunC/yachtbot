@@ -6,7 +6,7 @@
 
 function getPredict(price){
   price = parseFloat(price);
-  let divisionInt = getRandomInt(5,9);
+  let divisionInt = getRandomInt(4,9);
   var priceVariance = price / divisionInt; //range 9 to 5 to 9
   return roundToXDigits(price +  Math.floor(Math.random() * priceVariance) - (priceVariance / 2));
 }
