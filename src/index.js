@@ -22,7 +22,7 @@ client.on('ready', () => {
 client.on('message', async message => {
   try {
     const content = message.content
-    const tickerRegex = /^[$][A-Za-z ]{0,}$/i
+    const tickerRegex = /^[$][A-Za-z ]{1,}$/i
     const fuckRegex = /^f+u+c+k+$/gi
     const shitRegex = /^s+h+i+t+$/gi
     const tradeRegex = /^t+r+a+d+e/gi
