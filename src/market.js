@@ -4,43 +4,39 @@
  * for Discord Rich Embedded Message
  */
 const exchanges = require('./exchanges')
-
+//
+const marketLists = {
+  cmc: 'cmc',
+  binance: 'binance',
+  cc: 'cryptocompare'
+}
 /**
  * extracts trading pair and symbol i.e
  * $ETHBTC - ETH BTC
  * $ETHUSD - ETH USD
  * $LINK
  */
-const extractTradePairAndSymbol = symbol => {
-  let tradePair = symbol.substr(-3)
-  let tradeSymbol = ''
-  if (symbol.length === 3 || symbol.length === 4) {
-    tradePair = 'BTC'
-    tradeSymbol = symbol
-  } else {
-    if (tradePair === symbol) {
-      tradeSymbol = symbol
-    } else {
-      tradeSymbol = symbol.substr(0, symbol.length - tradePair.length)
-    }
+const extractTradePairAndSymbol = (symbol, tradePair) => {
+  if (symbol) {
+    symbol = symbol.toUpperCase()
+  }
+  if (tradePair) {
+    tradePair = tradePair.toUpperCase()
   }
   // ETHETH or BTCBTC is an invalid trade pair
-  if (tradePair !== tradeSymbol) {
-    if (tradePair === 'BTC') tradePair = 'BTC'
-    else if (tradePair === 'ETH') {
-      tradePair = 'ETH'
-    } else if (tradePair === 'BNB') {
-      tradePair = 'BNB'
-    } else if (tradePair === 'USD') {
-      // we use BTC if explicitly someone wants i.e VENUSD
-      tradePair = 'BTC'
-    }
-    return {
-      tradeSymbol,
-      tradePair
-    }
+  if (
+    (tradePair !== symbol && tradePair === 'USD') ||
+    !tradePair ||
+    (symbol !== 'BTC' && symbol === tradePair)
+  ) {
+    tradePair = 'BTC'
+  } else if (symbol === 'BTC') {
+    tradePair = 'USDT'
   }
-  return { tradeSymbol, tradePair: 'BTC' }
+  return {
+    tradeSymbol: symbol,
+    tradePair
+  }
 }
 
 /**
@@ -49,21 +45,24 @@ const extractTradePairAndSymbol = symbol => {
  * And calculate USD by (TRADING_PAIR_USD_PRICE * TRADING_PAIR_ALTCOIN_PRICE) i.e (ETH_USD * VEN_ETH)
  * Note: We need to make 2 Binance call for everything but the trading pairs. 1 CMC call for global average
  */
-const getPriceFromBinance = async symbol => {
+const getPriceFromBinance = async (symbol, pair) => {
   try {
     let binancePrice = {}
     // Binance requires a trading pair to pull in price i.e VENETH
-    let { tradeSymbol, tradePair } = extractTradePairAndSymbol(symbol)
+    let { tradeSymbol, tradePair } = extractTradePairAndSymbol(symbol, pair)
     if (tradeSymbol === 'BTC') {
       // we need to make only one call if it's BTC
-      binancePrice = await exchanges.binance.getCoinStats(tradeSymbol + 'USDT')
+      binancePrice = await exchanges.binance.getCoinStats(
+        tradeSymbol + tradePair
+      )
       binancePrice['tradePair'] = 'USDT'
     } else {
       // 1 call to get symbol price in provided pair
       let bnbSymbolPrice = await exchanges.binance.getCoinStats(
         tradeSymbol + tradePair
       )
-      // if and only if the coin exist on binance
+      // if and only if the coin with given symbol exist on binance
+      // find it's pair price to calculate to USD
       if (bnbSymbolPrice) {
         // 1 call to get current tradePair price to get accurate USD value
         let bnbTradePair = await exchanges.binance.getCoinStats(
@@ -82,7 +81,7 @@ const getPriceFromBinance = async symbol => {
     // insert symbols and pairs for URL since binance doesn't provide this
     binancePrice['symbol'] = tradeSymbol
     // get beautified objects for discord and return
-    return getBinanceEmbeddedContent(binancePrice)
+    return binancePrice
   } catch (error) {
     console.error(error)
   }
@@ -93,22 +92,21 @@ const getPriceFromBinance = async symbol => {
  */
 const getPriceFromCoinMarketCap = async symbol => {
   // get price from coin market cap and return as object
-  let { tradeSymbol } = extractTradePairAndSymbol(symbol)
   try {
-    return getCoinmarketcapEmbeddedContent(
-      await exchanges.coinmarketcap.getCoinStats(tradeSymbol)
-    )
+    return await exchanges.coinmarketcap.getCoinStats(symbol)
   } catch (error) {
     console.error(error)
     return null
   }
 }
+
 const priceInUSD = (pairPrice, ownPrice) => (pairPrice * ownPrice).toFixed(4)
 /**
  *
  * Generates embedded object from CMC data for Discord
  */
-const getCoinmarketcapEmbeddedContent = cmc => {
+const getCoinmarketcapEmbeddedContent = async symbol => {
+  const cmc = await getPriceFromCoinMarketCap(symbol)
   const result = {
     title: `__${cmc.name} (**${cmc.symbol}**)__  (${cmc.rank} Rank)`,
     url: `https://coinmarketcap.com/currencies/${cmc.name.replace(
@@ -145,7 +143,8 @@ const getCoinmarketcapEmbeddedContent = cmc => {
  *
  * Generates embedded object from Binance data for Discord
  */
-const getBinanceEmbeddedContent = binance => {
+const getBinanceEmbeddedContent = async (symbol, tradePair) => {
+  const binance = await getPriceFromBinance(symbol, tradePair)
   // Sometimes there's no binance result so we won't create that field
   let binanceField = {}
   let description = ''
@@ -157,13 +156,13 @@ const getBinanceEmbeddedContent = binance => {
       description = `**$${priceInUSD(
         binance.tradePairPrice,
         binance.lastPrice
-      )}** USD | **${parseFloat(binance.lastPrice).toFixed(6)}** ${
+      )}** USD | **${parseFloat(binance.lastPrice).toFixed(8)}** ${
         binance.tradePair
       }`
       priceChange = `**$ ${priceInUSD(
         binance.tradePairPrice,
         binance.priceChange
-      )}** USD | **${parseFloat(binance.priceChange).toFixed(6)}** ${
+      )}** USD | **${parseFloat(binance.priceChange).toFixed(8)}** ${
         binance.tradePair
       } | **${binance.priceChangePercent}**%`
 
@@ -214,6 +213,9 @@ const getBinanceEmbeddedContent = binance => {
   }
 }
 module.exports = {
+  marketLists,
   getPriceFromCoinMarketCap,
-  getPriceFromBinance
+  getPriceFromBinance,
+  getCoinmarketcapEmbeddedContent,
+  getBinanceEmbeddedContent
 }

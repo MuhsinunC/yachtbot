@@ -22,7 +22,7 @@ client.on('ready', () => {
 client.on('message', async message => {
   try {
     const content = message.content
-    const tickerRegex = /^[$][A-Za-z ]{3,}$/i
+    const tickerRegex = /^[$][A-Za-z ]{0,}$/i
     const fuckRegex = /^f+u+c+k+$/gi
     const shitRegex = /^s+h+i+t+$/gi
     const tradeRegex = /^t+r+a+d+e/gi
@@ -32,31 +32,42 @@ client.on('message', async message => {
       console.log(fuck.cmds)
       message.reply(fuck.cmds.fuck())
     } else if (content.match(tickerRegex)) {
-      const symbolAndTradePairMarket = content.replace('$', '').split(' ')
-      const symbolAndTradePair = symbolAndTradePairMarket[0].toUpperCase()
-      const marketName = symbolAndTradePairMarket[1]
+      let tradePair = null
+      let marketName = null
 
+      const symbolAndTradePairMarket = content.replace('$', '').split(' ')
+      const symbol = symbolAndTradePairMarket[0].toUpperCase()
+
+      if (symbolAndTradePairMarket[2]) {
+        tradePair = symbolAndTradePairMarket[1]
+        marketName = symbolAndTradePairMarket[2]
+      } else if (!symbolAndTradePairMarket[2] && symbolAndTradePairMarket[1]) {
+        tradePair = symbolAndTradePairMarket[1]
+      }
+      if (market.marketLists.hasOwnProperty(tradePair)) {
+        marketName = tradePair
+        tradePair = null
+      }
       // first send CMC since it's pretty instant
       if (!marketName || marketName.toUpperCase() === 'CMC') {
-        const coinmarketcapPrice = await market.getPriceFromCoinMarketCap(
-          symbolAndTradePair
+        const coinmarketcapPrice = await market.getCoinmarketcapEmbeddedContent(
+          symbol
         )
         if (coinmarketcapPrice) {
           message.reply({ embed: coinmarketcapPrice })
         } else {
-          message.reply(
-            `**${symbolAndTradePair.toUpperCase()}** was not found on CoinMarketCap!`
-          )
+          message.reply(`**${symbol}** was not found on CoinMarketCap!`)
         }
       } else if (marketName && marketName.toUpperCase() === 'BINANCE') {
-        const binancePrice = await market.getPriceFromBinance(
-          symbolAndTradePair
+        const binancePrice = await market.getBinanceEmbeddedContent(
+          symbol,
+          tradePair
         )
         if (binancePrice) {
           message.reply({ embed: binancePrice })
         } else {
           message.reply(
-            `**${symbolAndTradePair.toUpperCase()}** was not found on Binance!`
+            `**${symbol}** was not found on Binance with given trade pair!`
           )
         }
       }
