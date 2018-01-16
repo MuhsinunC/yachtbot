@@ -35,7 +35,7 @@ const generateRecommendation = function(coinJSON){
     // console.log("Coin: " + coin['symbol']);
     // console.log(coin);
     let coinRatio = parseFloat(coinJSON[coin].market_cap_usd) / parseFloat(coinJSON[coin]['24h_volume_usd']);
-    if(coinRatio < lowestRatio){
+    if(coinRatio < lowestRatio && parseFloat(coinJSON[coin].market_cap_usd) > 200000){
       lowestRatio = coinRatio;
     }
 
