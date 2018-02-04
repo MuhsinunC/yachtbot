@@ -74,7 +74,7 @@ const getPriceFromBinance = async (symbol, pair) => {
         bnbSymbolPrice['tradePair'] = tradePair
         binancePrice = bnbSymbolPrice
       } else {
-        // sometimes a coin/pair might not exist on binance in that case don't continue;
+        // sometimes a coin/pair might not exist on binance in that case don't continue
         return null
       }
     }
@@ -103,7 +103,6 @@ const getPriceFromCoinMarketCap = async symbol => {
 const getAllPricesFromCoinMarketCap = async symbol => {
   // get price from coin market cap and return as object
   try {
-
     return await exchanges.coinmarketcap.getCoinStats()
   } catch (error) {
     console.error(error)
@@ -248,7 +247,6 @@ async function getMarketValue (ticker) {
     console.error(error)
   }
 }
-
 
 module.exports = {
   getMarketValue,

@@ -30,7 +30,7 @@ function getAsshole () {
 }
 
 function getFuckYou () {
-  return "no, fuck you :reversed_hand_with_middle_finger_extended:"
+  return 'no, fuck you :reversed_hand_with_middle_finger_extended:'
 }
 
 module.exports.cmds = {

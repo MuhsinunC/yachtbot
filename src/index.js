@@ -13,8 +13,8 @@ const replies = require('./replies')
 const market = require('./market')
 const trade = require('./trade')
 const ticker = require('./ticker')
-const recommend = require('./recommend');
-const predict = require('./predict');
+const recommend = require('./recommend')
+const predict = require('./predict')
 
 // indicate bot is connected
 client.on('ready', () => {
@@ -57,18 +57,17 @@ client.on('message', async message => {
       message.reply(replies.cmds.asshole())
     } else if (content.match(fuckyouRegex)) {
       message.reply(replies.cmds.fuckyou())
-    }else if(content.match(recommendAllRegex)){
-      const response = await recommend.recommendAllCoins("all");
-      message.reply(response);
-    }
-    else if(content.match(recommendRegex)){
-      const response = await recommend.recommendCoin("all");
-      message.reply(response);
-    }else if(content.match(predictRegex)){
-      const ticker = content.replace('predict ', '');
-      const response = await market.getMarketValue(content.replace('predict $', ''));
-      message.reply(ticker + " prediction: " + predict.predict.predict(response) +
-      "   current: " + response);
+    } else if (content.match(recommendAllRegex)) {
+      const response = await recommend.recommendAllCoins('all')
+      message.reply(response)
+    } else if (content.match(recommendRegex)) {
+      const response = await recommend.recommendCoin('all')
+      message.reply(response)
+    } else if (content.match(predictRegex)) {
+      const ticker = content.replace('predict ', '')
+      const response = await market.getMarketValue(content.replace('predict $', ''))
+      message.reply(ticker + ' prediction: ' + predict.predict.predict(response) +
+      '   current: ' + response)
     }
   } catch (error) {
     console.error(error)

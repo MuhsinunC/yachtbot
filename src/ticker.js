@@ -9,7 +9,6 @@
 const market = require('./market')
 
 const tickerfunc = async function (content) {
-
   let tradePair = null
   let marketName = null
 
@@ -19,7 +18,6 @@ const tickerfunc = async function (content) {
   let response = ''
 
   try {
-
     if (symbolAndTradePairMarket[2]) {
       tradePair = symbolAndTradePairMarket[1]
       marketName = symbolAndTradePairMarket[2]
@@ -34,7 +32,7 @@ const tickerfunc = async function (content) {
     if (!marketName || marketName.toUpperCase() === 'CMC') {
       const coinmarketcapPrice = await market.getCoinmarketcapEmbeddedContent(symbol)
       if (coinmarketcapPrice) {
-        console.log(coinmarketcapPrice);
+        console.log(coinmarketcapPrice)
         response += { embed: coinmarketcapPrice }
       } else {
         response += '**$' + {symbol} + '** was not found on CoinMarketCap!'
@@ -50,16 +48,14 @@ const tickerfunc = async function (content) {
         response += '**$' + {symbol} + '** was not found on Binance with given trade pair!'
       }
     }
-
   } catch (error) {
     console.error(error)
   }
 
-  str = JSON.stringify(response, null, 4); // (Optional) beautiful indented output.
-  console.log(response); // Logs output to dev tools console.
-  console.log(str);
+  str = JSON.stringify(response, null, 4) // (Optional) beautiful indented output.
+  console.log(response) // Logs output to dev tools console.
+  console.log(str)
   return response
-
 }
 
 module.exports.tickerfunc = tickerfunc

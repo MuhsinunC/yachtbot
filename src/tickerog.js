@@ -29,7 +29,7 @@ const tickerfunc = async function (content) {
       symbol
     )
     if (coinmarketcapPrice) {
-      console.log(coinmarketcapPrice);
+      console.log(coinmarketcapPrice)
       message.reply({ embed: coinmarketcapPrice })
     } else {
       message.reply(`**${symbol}** was not found on CoinMarketCap!`)
