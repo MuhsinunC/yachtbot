@@ -52,9 +52,8 @@ const tickerfunc = async function (content) {
     console.error(error)
   }
 
-  let str = JSON.stringify(response, null, 4) // (Optional) beautiful indented output.
+  let str = JSON.stringify(response)
   console.log(str)
-  console.log(response) // Logs output to dev tools console.
   return response
 }
 
