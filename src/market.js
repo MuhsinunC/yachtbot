@@ -185,14 +185,14 @@ const getBinanceEmbeddedContent = async (symbol, tradePair) => {
     }
 
     const binanceField = new Discord.RichEmbed()
-        .setTitle('__**' + binance.symbol + ' on Binance**__')
-        .setURL('https://www.binance.com/trade.html?symbol=' + binance.symbol + '_' + binance.tradePair)
-        .setDescription(description)
-        .setColor(parseFloat(binance.priceChangePercent) < 0 ? 10958133 : 5943124)
-        .addField('Price Change (24h)', priceChange, true)
-        .addField('Movement (24h)', movement, true)
-        .addField('Volume (24h)', volume, true)
-        .setFooter('Results from Binance')
+      .setTitle('__**' + binance.symbol + ' on Binance**__')
+      .setURL('https://www.binance.com/trade.html?symbol=' + binance.symbol + '_' + binance.tradePair)
+      .setDescription(description)
+      .setColor(parseFloat(binance.priceChangePercent) < 0 ? 10958133 : 5943124)
+      .addField('Price Change (24h)', priceChange, true)
+      .addField('Movement (24h)', movement, true)
+      .addField('Volume (24h)', volume, true)
+      .setFooter('Results from Binance')
 
     return binanceField
   } else {
