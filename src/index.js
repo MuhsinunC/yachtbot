@@ -18,7 +18,7 @@ const predict = require('./predict')
 
 // indicate bot is connected
 client.on('ready', () => {
-  console.info('bot is ready!')
+  console.info('Bot is ready!')
 })
 
 // parse user messages and respond accordingly
@@ -77,7 +77,7 @@ client.on('message', async message => {
 // make the bot login to the server
 try {
   client.login(config.secret)
-  console.info('bot has logged in')
+  console.info('Bot has logged in')
 } catch (error) {
-  console.error('bot failed to login', error)
+  console.error('Bot failed to login', error)
 }
