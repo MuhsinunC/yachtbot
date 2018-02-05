@@ -37,12 +37,12 @@ client.on('message', async message => {
     const recommendAllRegex = /^r+e+c+o+m+m+e+n+d\sa+l+l$/gi
     const predictRegex = /^p+r+e+d+i+c+t\s[$][A-Z]{3,4}$/gi
 
-    if (content.match(fuckRegex)) {
-      message.reply(replies.cmds.fuck())
-    } else if (content.match(tickerRegex)) {
+    if (content.match(tickerRegex)) {
       const response = await ticker.tickerfunc(content)
       console.log(response)
       message.reply(response)
+    } else if (content.match(fuckRegex)) {
+      message.reply(replies.cmds.fuck())
     } else if (content.match(tradeRegex)) {
       const response = await trade.tradeSimulator(content)
       console.log(response)
