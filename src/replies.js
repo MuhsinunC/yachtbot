@@ -17,6 +17,10 @@ function getFuck () {
   return 'fuck me daddy :tongue:'
 }
 
+function getFuckYou () {
+  return 'no, fuck you :reversed_hand_with_middle_finger_extended:'
+}
+
 function getBitch () {
   return "don't be a bitch."
 }
@@ -29,15 +33,11 @@ function getAsshole () {
   return "***YOU'RE*** the asshole. :reversed_hand_with_middle_finger_extended:"
 }
 
-function getFuckYou () {
-  return 'no, fuck you :reversed_hand_with_middle_finger_extended:'
-}
-
 module.exports.cmds = {
   help: getHelp,
   fuck: getFuck,
+  fuckyou: getFuckYou,
   bitch: getBitch,
   shit: getShit,
-  asshole: getAsshole,
-  fuckyou: getFuckYou
+  asshole: getAsshole
 }
