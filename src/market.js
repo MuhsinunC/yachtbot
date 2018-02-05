@@ -118,36 +118,15 @@ const priceInUSD = (pairPrice, ownPrice) => (pairPrice * ownPrice).toFixed(4)
 const getCoinmarketcapEmbeddedContent = async symbol => {
   const cmc = await getPriceFromCoinMarketCap(symbol)
   if (cmc) {
-    const result = {
-      title: `__${cmc.name} (**${cmc.symbol}**)__  (${cmc.rank} Rank)`,
-      url: `https://coinmarketcap.com/currencies/${cmc.name.replace(
-        /\s+/g,
-        '-'
-      )}/`,
-      description: `Global Average Price: **$${cmc.price_usd}** USD | **${
-        cmc.price_btc
-      }** BTC`,
-      color: parseFloat(cmc.percent_change_24h) < 0 ? 10958133 : 5943124,
-      fields: [
-        {
-          name: 'Price Change',
-          value: `**${cmc.percent_change_1h}**% 1h | **${
-            cmc.percent_change_24h
-          }**% 24h`,
-          inline: true
-        },
-        {
-          name: 'Market Cap',
-          value: `$${parseFloat(cmc.market_cap_usd).toFixed(2)}`,
-          inline: true
-        },
-        {
-          name: 'Volume (24h)',
-          value: `$${parseFloat(cmc['24h_volume_usd']).toFixed(2)}`,
-          inline: true
-        }
-      ]
-    }
+    const Discord = require('discord.js')
+    const result = new Discord.RichEmbed()
+      .setTitle('This is a Title')
+      .addField('__$' + cmc.name + ' (**$' + cmc.symbol + '**)__  ($' + cmc.rank + ' Rank)', 'Global Average Price: **$$' + cmc.price_usd + '** USD | **$' + cmc.price_btc + '** BTC')
+      .setColor(parseFloat(cmc.percent_change_24h) < 0 ? 10958133 : 5943124)
+      .addField('Price Change', '**$' + cmc.percent_change_1h + '**% 1h | **$' + cmc.percent_change_24h + '**% 24h', true)
+      .addField('Market Cap', '$$' + parseFloat(cmc.market_cap_usd).toFixed(2), true)
+      .addField('Volume (24h)', '$$' + parseFloat(cmc['24h_volume_usd']).toFixed(2), true)
+      .setFooter('Wassup fam squad Moose was here')
     return result
   }
   return null
