@@ -39,11 +39,9 @@ client.on('message', async message => {
 
     if (content.match(tickerRegex)) {
       const response = await ticker.tickerfunc(content)
-      console.log(response)
-      message.reply(response)
+      message.channel.send(response)
     } else if (content.match(tradeRegex)) {
       const response = await trade.tradeSimulator(content)
-      console.log(response)
       message.reply(response)
     } else if (content.match(helpRegex)) {
       message.reply(replies.cmds.help())
