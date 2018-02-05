@@ -16,6 +16,9 @@ const marketLists = {
  * $ETHUSD - ETH USD
  * $LINK
  */
+
+const Discord = require('discord.js')
+
 const extractTradePairAndSymbol = (symbol, tradePair) => {
   if (symbol) {
     symbol = symbol.toUpperCase()
@@ -118,15 +121,16 @@ const priceInUSD = (pairPrice, ownPrice) => (pairPrice * ownPrice).toFixed(4)
 const getCoinmarketcapEmbeddedContent = async symbol => {
   const cmc = await getPriceFromCoinMarketCap(symbol)
   if (cmc) {
-    const Discord = require('discord.js')
     const result = new Discord.RichEmbed()
-      .setTitle('This is a Title')
-      .addField('__$' + cmc.name + ' (**$' + cmc.symbol + '**)__  ($' + cmc.rank + ' Rank)', 'Global Average Price: **$$' + cmc.price_usd + '** USD | **$' + cmc.price_btc + '** BTC')
+      .setTitle('__$' + cmc.name + ' (**$' + cmc.symbol + '**)__  ($' + cmc.rank + ' Rank)')
+      .setURL('https://coinmarketcap.com/currencies/' + cmc.name.replace(/\s+/g, '-') + '/')
+      .setDescription('Global Average Price: **$$' + cmc.price_usd + '** USD | **$' + cmc.price_btc + '** BTC')
+      .setThumbnail('https://files.coinmarketcap.com/static/img/coins/128x128/' + cmc.name.replace(/\s+/g, '-').toLowerCase() + '.png')
       .setColor(parseFloat(cmc.percent_change_24h) < 0 ? 10958133 : 5943124)
       .addField('Price Change', '**$' + cmc.percent_change_1h + '**% 1h | **$' + cmc.percent_change_24h + '**% 24h', true)
       .addField('Market Cap', '$$' + parseFloat(cmc.market_cap_usd).toFixed(2), true)
       .addField('Volume (24h)', '$$' + parseFloat(cmc['24h_volume_usd']).toFixed(2), true)
-      .setFooter('Wassup fam squad Moose was here')
+      .setFooter('Results from CoinMarketCap')
     return result
   }
   return null
@@ -138,7 +142,6 @@ const getCoinmarketcapEmbeddedContent = async symbol => {
 const getBinanceEmbeddedContent = async (symbol, tradePair) => {
   const binance = await getPriceFromBinance(symbol, tradePair)
   // Sometimes there's no binance result so we won't create that field
-  let binanceField = {}
   let description = ''
   let priceChange = ''
   let movement = ''
@@ -169,6 +172,9 @@ const getBinanceEmbeddedContent = async (symbol, tradePair) => {
       )} USD / ${parseFloat(binance.lowPrice).toFixed(6)} ${binance.tradePair}`
 
       volume = `${binance.quoteVolume} ${binance.tradePair}`
+
+      // -------------------------------------- Mooooooooooooooooooose
+
     } else {
       description = `**$${parseFloat(binance.lastPrice).toFixed(4)}** USD`
       priceChange = `**$ ${parseFloat(binance.priceChange).toFixed(
@@ -178,29 +184,21 @@ const getBinanceEmbeddedContent = async (symbol, tradePair) => {
         4
       )} USD | **Low**: $${parseFloat(binance.lowPrice).toFixed(4)} USD`
       volume = `$${binance.quoteVolume} USD`
+
+      // -------------------------------------- Mooooooooooooooooooose
+
     }
-    binanceField = {
-      title: `__**${binance.symbol} on Binance**__`,
-      url: `https://www.binance.com/trade.html?symbol=${binance.symbol}_${
-        binance.tradePair
-      }`,
-      description: description,
-      color: parseFloat(binance.priceChangePercent) < 0 ? 10958133 : 5943124,
-      fields: [
-        {
-          name: 'Price Change (24h)',
-          value: priceChange
-        },
-        {
-          name: 'Movement (24h)',
-          value: movement
-        },
-        {
-          name: 'Volume (24h)',
-          value: volume
-        }
-      ]
-    }
+
+    const binanceField = new Discord.RichEmbed()
+        .setTitle('__**$' + binance.symbol + ' on Binance**__')
+        .setURL('https://www.binance.com/trade.html?symbol=' + binance.symbol + '_' + binance.tradePair)
+        .setDescription(description)
+        .setColor(parseFloat(binance.priceChangePercent) < 0 ? 10958133 : 5943124)
+        .addField('Price Change (24h)', priceChange, true)
+        .addField('Movement (24h)', movement, true)
+        .addField('Volume (24h)', volume, true)
+        .setFooter('Results from Binance')
+
     return binanceField
   } else {
     return null
