@@ -1,5 +1,5 @@
 /**
- * Run simple trade simulator for bot
+ * Ticker script
  * @method ticker
  * @param {String} content - content of message to be parsed
  * @return {String} - A response from trade simulator
@@ -35,7 +35,7 @@ const tickerfunc = async function (content) {
         console.log(coinmarketcapPrice)
         response += { embed: coinmarketcapPrice }
       } else {
-        response += '**$' + {symbol} + '** was not found on CoinMarketCap!'
+        response += '**$' + symbol + '** was not found on CoinMarketCap!'
       }
     } else if (marketName && marketName.toUpperCase() === 'BINANCE') {
       const binancePrice = await market.getBinanceEmbeddedContent(
@@ -45,7 +45,7 @@ const tickerfunc = async function (content) {
       if (binancePrice) {
         response += { embed: binancePrice }
       } else {
-        response += '**$' + {symbol} + '** was not found on Binance with given trade pair!'
+        response += '**$' + symbol + '** was not found on Binance with given trade pair!'
       }
     }
   } catch (error) {
