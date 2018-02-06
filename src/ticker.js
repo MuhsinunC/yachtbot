@@ -11,11 +11,10 @@ const market = require('./market')
 const tickerfunc = async function (content) {
   let tradePair = null
   let marketName = null
-
+  let response = ''
+  
   const symbolAndTradePairMarket = content.replace('$', '').split(' ')
   const symbol = symbolAndTradePairMarket[0].toUpperCase()
-
-  var response = ''
 
   try {
     if (symbolAndTradePairMarket[2]) {
