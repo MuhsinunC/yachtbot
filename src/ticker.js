@@ -15,6 +15,8 @@ const tickerfunc = async function (content) {
   const symbolAndTradePairMarket = content.replace('$', '').split(' ')
   const symbol = symbolAndTradePairMarket[0].toUpperCase()
 
+  var response = ''
+
   try {
     if (symbolAndTradePairMarket[2]) {
       tradePair = symbolAndTradePairMarket[1]
@@ -22,7 +24,7 @@ const tickerfunc = async function (content) {
     } else if (!symbolAndTradePairMarket[2] && symbolAndTradePairMarket[1]) {
       tradePair = symbolAndTradePairMarket[1]
     }
-    if (market.marketLists.hasOwnProperty(tradePair.toLowerCase())) {
+    if (market.marketLists.hasOwnProperty(tradePair)) {
       marketName = tradePair
       tradePair = null
     }
@@ -30,9 +32,9 @@ const tickerfunc = async function (content) {
     if (!marketName || marketName.toUpperCase() === 'CMC') {
       const coinmarketcapPrice = await market.getCoinmarketcapEmbeddedContent(symbol)
       if (coinmarketcapPrice) {
-        var response = {embed: coinmarketcapPrice}
+        response = {embed: coinmarketcapPrice}
       } else {
-        var response = '**$' + symbol + '** was not found on CoinMarketCap!'
+        response = '**$' + symbol + '** was not found on CoinMarketCap!'
       }
     } else if (marketName && marketName.toUpperCase() === 'BINANCE') {
       const binancePrice = await market.getBinanceEmbeddedContent(
@@ -40,9 +42,9 @@ const tickerfunc = async function (content) {
         tradePair
       )
       if (binancePrice) {
-        var response = {embed: binancePrice}
+        response = {embed: binancePrice}
       } else {
-        var response = '**$' + symbol + '** was not found on Binance with given trade pair!'
+        response = '**$' + symbol + '** was not found on Binance with given trade pair!'
       }
     }
   } catch (error) {
