@@ -34,7 +34,7 @@ const tickerfunc = async function (content) {
       if (coinmarketcapPrice) {
         response = {embed: coinmarketcapPrice}
       } else {
-        response = '**$' + symbol + '** was not found on CoinMarketCap!'
+        response = '**' + symbol + '** was not found on CoinMarketCap!'
       }
     } else if (marketName && marketName.toUpperCase() === 'BINANCE') {
       const binancePrice = await market.getBinanceEmbeddedContent(
@@ -44,7 +44,7 @@ const tickerfunc = async function (content) {
       if (binancePrice) {
         response = {embed: binancePrice}
       } else {
-        response = '**$' + symbol + '** was not found on Binance with given trade pair!'
+        response = '**' + symbol + '** was not found on Binance with given trade pair!'
       }
     }
   } catch (error) {
