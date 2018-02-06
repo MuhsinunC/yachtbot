@@ -184,10 +184,13 @@ const getBinanceEmbeddedContent = async (symbol, tradePair) => {
       volume = `$${binance.quoteVolume} USD`
     }
 
+    const cmc = await getPriceFromCoinMarketCap(symbol)
+
     const binanceField = new Discord.RichEmbed()
       .setTitle('__**' + binance.symbol + ' on Binance**__')
       .setURL('https://www.binance.com/trade.html?symbol=' + binance.symbol + '_' + binance.tradePair)
       .setDescription(description)
+      .setThumbnail('https://files.coinmarketcap.com/static/img/coins/128x128/' + cmc.name.replace(/\s+/g, '-').toLowerCase() + '.png')
       .setColor(parseFloat(binance.priceChangePercent) < 0 ? 10958133 : 5943124)
       .addField('Price Change (24h)', priceChange, true)
       .addField('Movement (24h)', movement, true)
