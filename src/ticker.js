@@ -22,7 +22,7 @@ const tickerfunc = async function (content) {
       tradePair = symbolAndTradePairMarket[1]
       marketName = symbolAndTradePairMarket[2]
     } else if (!symbolAndTradePairMarket[2] && symbolAndTradePairMarket[1]) {
-      tradePair = symbolAndTradePairMarket[1]
+      tradePair = symbolAndTradePairMarket[1].toLowerCase()
     }
     if (market.marketLists.hasOwnProperty(tradePair)) {
       marketName = tradePair
