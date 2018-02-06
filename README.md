@@ -11,7 +11,7 @@
 ### Traditional
 
 ```sh
-$ git clone https://github.com/SyedAman/discord-crypto-webhook.git
+$ git clone https://github.com/YACHTPARTY/yachtbot.git
 $ cd discord-crypto-webhook
 $ npm install
 $ npm start
