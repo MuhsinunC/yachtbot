@@ -7,7 +7,9 @@ const exchanges = require('./exchanges')
 //
 const marketLists = {
   cmc: 'cmc',
+  c: 'cmc',
   binance: 'binance',
+  b: 'binance',
   cc: 'cryptocompare'
 }
 /**
@@ -20,6 +22,8 @@ const marketLists = {
 const Discord = require('discord.js')
 
 const extractTradePairAndSymbol = (symbol, tradePair) => {
+  console.log(symbol, tradePair)
+  console.log(' ^ in extract')
   if (symbol) {
     symbol = symbol.toUpperCase()
   }
@@ -33,7 +37,8 @@ const extractTradePairAndSymbol = (symbol, tradePair) => {
     (symbol !== 'BTC' && symbol === tradePair)
   ) {
     tradePair = 'BTC'
-  } else if (symbol === 'BTC') {
+  }
+  if (symbol === 'BTC') {
     tradePair = 'USDT'
   }
   return {
@@ -53,6 +58,7 @@ const getPriceFromBinance = async (symbol, pair) => {
     let binancePrice = {}
     // Binance requires a trading pair to pull in price i.e VENETH
     let { tradeSymbol, tradePair } = extractTradePairAndSymbol(symbol, pair)
+    console.log(tradeSymbol, tradePair)
     if (tradeSymbol === 'BTC') {
       // we need to make only one call if it's BTC
       binancePrice = await exchanges.binance.getCoinStats(
@@ -122,14 +128,46 @@ const getCoinmarketcapEmbeddedContent = async symbol => {
   const cmc = await getPriceFromCoinMarketCap(symbol)
   if (cmc) {
     const result = new Discord.RichEmbed()
-      .setTitle('__' + cmc.name + ' (**' + cmc.symbol + '**)__  (Rank ' + cmc.rank + ')')
-      .setURL('https://coinmarketcap.com/currencies/' + cmc.name.replace(/\s+/g, '-') + '/')
-      .setDescription('Global Average Price: **$' + cmc.price_usd + '** USD | **' + cmc.price_btc + '** BTC')
-      .setThumbnail('https://files.coinmarketcap.com/static/img/coins/128x128/' + cmc.name.replace(/\s+/g, '-').toLowerCase() + '.png')
+      .setTitle(
+        '__' + cmc.name + ' (**' + cmc.symbol + '**)__  (Rank ' + cmc.rank + ')'
+      )
+      .setURL(
+        'https://coinmarketcap.com/currencies/' +
+          cmc.name.replace(/\s+/g, '-') +
+          '/'
+      )
+      .setDescription(
+        'Global Average Price: **$' +
+          cmc.price_usd +
+          '** USD | **' +
+          cmc.price_btc +
+          '** BTC'
+      )
+      .setThumbnail(
+        'https://files.coinmarketcap.com/static/img/coins/128x128/' +
+          cmc.name.replace(/\s+/g, '-').toLowerCase() +
+          '.png'
+      )
       .setColor(parseFloat(cmc.percent_change_24h) < 0 ? 10958133 : 5943124)
-      .addField('Price Change', '**' + cmc.percent_change_1h + '**% 1h | **' + cmc.percent_change_24h + '**% 24h', true)
-      .addField('Market Cap', '$' + parseFloat(cmc.market_cap_usd).toFixed(2), true)
-      .addField('Volume (24h)', '$' + parseFloat(cmc['24h_volume_usd']).toFixed(2), true)
+      .addField(
+        'Price Change',
+        '**' +
+          cmc.percent_change_1h +
+          '**% 1h | **' +
+          cmc.percent_change_24h +
+          '**% 24h',
+        true
+      )
+      .addField(
+        'Market Cap',
+        '$' + parseFloat(cmc.market_cap_usd).toFixed(2),
+        true
+      )
+      .addField(
+        'Volume (24h)',
+        '$' + parseFloat(cmc['24h_volume_usd']).toFixed(2),
+        true
+      )
       .setFooter('Results from CoinMarketCap')
     return result
   }
@@ -183,14 +221,15 @@ const getBinanceEmbeddedContent = async (symbol, tradePair) => {
       )} USD | **Low**: $${parseFloat(binance.lowPrice).toFixed(4)} USD`
       volume = `$${binance.quoteVolume} USD`
     }
-
-    const cmc = await getPriceFromCoinMarketCap(symbol)
-
     const binanceField = new Discord.RichEmbed()
       .setTitle('__**' + binance.symbol + ' on Binance**__')
-      .setURL('https://www.binance.com/trade.html?symbol=' + binance.symbol + '_' + binance.tradePair)
+      .setURL(
+        'https://www.binance.com/trade.html?symbol=' +
+          binance.symbol +
+          '_' +
+          binance.tradePair
+      )
       .setDescription(description)
-      .setThumbnail('https://files.coinmarketcap.com/static/img/coins/128x128/' + cmc.name.replace(/\s+/g, '-').toLowerCase() + '.png')
       .setColor(parseFloat(binance.priceChangePercent) < 0 ? 10958133 : 5943124)
       .addField('Price Change (24h)', priceChange, true)
       .addField('Movement (24h)', movement, true)
@@ -211,12 +250,14 @@ const getBinanceEmbeddedContent = async (symbol, tradePair) => {
  * @param  {String} ticker - The cryptocurrency symbol i.e $ETH.
  * @return {Number} - The price of the ticker in USD.
  */
-const cc = require('cryptocompare')
 
 async function getMarketValue (ticker) {
   try {
     // fetch crypto pricings
-    const VAL = await cc.price(ticker.toUpperCase(), ['USD'])
+    const VAL = await exchanges.cryptocompare.getMarketValue(
+      ticker.toUpperCase(),
+      ['USD']
+    )
     return VAL.USD
   } catch (error) {
     console.error(error)
