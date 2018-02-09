@@ -12,7 +12,7 @@ const tickerfunc = async function (content) {
   let tradePair = null
   let marketName = null
   let response = ''
-  
+
   const symbolAndTradePairMarket = content.replace('$', '').split(' ')
   const symbol = symbolAndTradePairMarket[0].toUpperCase()
 
@@ -24,14 +24,16 @@ const tickerfunc = async function (content) {
       tradePair = symbolAndTradePairMarket[1].toLowerCase()
     }
     if (market.marketLists.hasOwnProperty(tradePair)) {
-      marketName = tradePair
+      marketName = market.marketLists[tradePair]
       tradePair = null
     }
     // first send CMC since it's pretty instant
     if (!marketName || marketName.toUpperCase() === 'CMC') {
-      const coinmarketcapPrice = await market.getCoinmarketcapEmbeddedContent(symbol)
+      const coinmarketcapPrice = await market.getCoinmarketcapEmbeddedContent(
+        symbol
+      )
       if (coinmarketcapPrice) {
-        response = {embed: coinmarketcapPrice}
+        response = { embed: coinmarketcapPrice }
       } else {
         response = '**' + symbol + '** was not found on CoinMarketCap!'
       }
@@ -41,9 +43,10 @@ const tickerfunc = async function (content) {
         tradePair
       )
       if (binancePrice) {
-        response = {embed: binancePrice}
+        response = { embed: binancePrice }
       } else {
-        response = '**' + symbol + '** was not found on Binance with given trade pair!'
+        response =
+          '**' + symbol + '** was not found on Binance with given trade pair!'
       }
     }
   } catch (error) {
